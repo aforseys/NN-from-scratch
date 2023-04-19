@@ -5,26 +5,33 @@ Created on Sun Apr 16 19:04:55 2023
 
 @author: aforsey
 """
-from math import e
+import numpy as np
 
 def ReLU(z):
-    if z>0:
-        return z
-    elif z<=0:
-        return 0
+    return np.maximum(0,z)
+
+def dReLU(z):
+    return 1*(z>0)
     
 def sigmoid(z):
-    return 1/(1+e**(-z))
+    return 1/(1+np.exp(-z))
 
-#Tanh similar to sigmoid but pushes values to -1 and 1 (instead of 0 and 1)
-#also has a much greater gradient in the center region near zero 
-#--> gives higher values of gradient during training, and larger updates
-#in weights in NN during training --> gives strong gradients and big learnign steps
-#also symmetric about zero so faster convergence(?)..
 def tanh(z):
-    return (e**(2*z)-1)/(e**(2*z)+1)
+    """
+    Note: tanh is very similar to the sigmoid function, but pushes values to 
+    -1 and 1. Tanh also has a much greater gradient in the center region near
+    zero, therefore it gives higher values of gradient during training resulting
+    in larger updates in weights during training. 
+    """
+    return (np.exp(2*z)-1)/(np.exp(2*z)+1)
     
-#output latyer activation function (takes in VECTOR z and outputs a vector)
-def softmax(z):
-    z_softmax = [e**z_i for z_i in z]
+
+def softmax(z_vec):
+    """
+    Output layer activation function.
+    
+    Input is VECTOR z, output is a VECTOR representing the probability a
+    distribution over categorical data.
+    """
+    z_softmax = [np.exp(z_i) for z_i in z_vec]
     return z_softmax/sum(z_softmax)
