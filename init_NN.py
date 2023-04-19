@@ -8,7 +8,7 @@ Created on Sun Apr 16 18:38:03 2023
 import numpy as np
 from activation_functions import softmax
 
-class NerualNet:
+class NeuralNetwork:
     def __init__(self,lsize,activation,dactivation, loss):
         """
         Parameters
