@@ -11,7 +11,19 @@ def ReLU(z):
     return np.maximum(0,z)
 
 def dReLU(z):
-    return 1*(z>0)
+    # print(z)
+    # print(type(z))
+    # print('test', (z>0))
+    # print('test2', np.shape(1*(z>0)))
+    # print(np.diag((1*(z>0))))
+    
+    # print((1*(z>0)).reshape(np.shape(z)[0],))
+    
+    # print(np.diag((1*(z>0)).reshape(np.shape(z)[0],)))
+    
+    return np.diag((1*(z>0)).reshape(np.shape(z)[0],)) #flatten array before diagonalization
+    
+   # return np.diag(1*(z>0)) #HOW DOES THIS OUTPUT A MATRIX WHEN APPLIED TO A VECTOR?????
     
 def sigmoid(z):
     return 1/(1+np.exp(-z))
@@ -33,5 +45,14 @@ def softmax(z_vec):
     Input is VECTOR z, output is a VECTOR representing the probability a
     distribution over categorical data.
     """
-    z_softmax = [np.exp(z_i) for z_i in z_vec]
-    return z_softmax/sum(z_softmax)
+    #print(z_vec)
+    #z_softmax = [np.exp(z_i) for z_i in z_vec]
+    z_softmax = z_vec #l- np.max(z_vec) #NORMALIZATION TRICK TO HELP W NUMERICAL STABILITY (doesn't change output)
+
+  #  print("softmax output", np.exp(z_softmax) / np.sum(np.exp(z_softmax)))
+    return np.exp(z_softmax) / np.sum(np.exp(z_softmax))
+    
+   # print('softmax', z_softmax)
+    
+   # print(z_softmax)
+   # return z_softmax/sum(z_softmax)
