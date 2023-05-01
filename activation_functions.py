@@ -48,6 +48,7 @@ def softmax(z_vec):
     #print(z_vec)
     #z_softmax = [np.exp(z_i) for z_i in z_vec]
     z_softmax = z_vec #l- np.max(z_vec) #NORMALIZATION TRICK TO HELP W NUMERICAL STABILITY (doesn't change output)
+
   #  print("softmax output", np.exp(z_softmax) / np.sum(np.exp(z_softmax)))
     return np.exp(z_softmax) / np.sum(np.exp(z_softmax))
     

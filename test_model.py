@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+<<<<<<< HEAD
 Created on Mon May  1 11:34:36 2023
+=======
+Created on Mon May  1 14:38:19 2023
+>>>>>>> backprop-test
 
 @author: aforsey
 """
@@ -13,6 +17,7 @@ import activation_functions
 import loss_functions
 
 from init_NN import NeuralNetwork
+
 
 #import training data 
 training_images = idx2numpy.convert_from_file(os.getcwd()+'/training_data/train-images.idx3-ubyte')
@@ -36,6 +41,7 @@ test_images = test_images.reshape(np.shape(test_images)[0], np.shape(test_images
 test_one_hot_labels = np.zeros((test_labels.size, test_labels.max()+1)) #have to add one because includes 0 as possible number 
 test_one_hot_labels[np.arange(test_labels.size),test_labels] = 1
 
+
 #shuffle data 
 p = np.random.permutation(len(training_images))
 training_images_shuffled = training_images[p]
@@ -51,3 +57,12 @@ nn.train_epoch(training_images_shuffled[0:60000,:]/255, training_one_hot_labels_
 #nn.train_minibatch(training_images_shuffled[0:60000,:]/255, training_one_hot_labels_shuffled[0:60000,:], batch_size=100)
 
 nn.test(test_images[0:10000,:]/255, test_one_hot_labels[0:10000,:])
+
+##initialize NN 
+# lsize = [784, 140, 10] #(input layer must be 784 and output layer must be 10), hidden layers can be anything 
+# nn = NeuralNetwork(lsize, activation_functions.ReLU, activation_functions.dReLU, loss_functions.cross_entropy, loss_functions.dcross_entropy)
+
+# nn.train_epoch(training_images_shuffled/255, test_images_shuffled, epochs=10, batch_size=10)
+
+# nn.test(test_images/255, test_one_hot_labels)
+
