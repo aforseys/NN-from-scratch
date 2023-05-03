@@ -8,7 +8,7 @@ Created on Sun Apr 16 19:01:40 2023
 import numpy as np
 from activation_functions import softmax
 
-def cross_entropy(y, s, print_flag=False):
+def cross_entropy(y, s):
     """
     Loss function used for softmax output
     
@@ -25,20 +25,12 @@ def cross_entropy(y, s, print_flag=False):
     Notes 
     -------
     np.log uses base e, although cross entropy often calculated with log 
-    base 2. No real effect but potentially something to change. 
+    base 2. 
+    
     """
-  #  print('y', y)
-  #  print('s', s)
-  #  print('log s and some', np.log(s+1e-15))
-  #  print('test problem', np.log(s+1e-15)) #add small constant so don't take log(0)
-  
 
     c = np.dot(np.transpose(y), np.log(s)) 
     
-    if print_flag:
-        print("s", s)
-        print('y', y)
-        print("cross entropy loss", -c)
     return -c
 
 
@@ -57,6 +49,26 @@ def dcross_entropy(y,z):
 
     return softmax(z)-y
 
-#derivative of cross_entropy loss (including softmax) wrt output vector z is
-#dL/dz = softmax(z)-y
-#(derived in notebook from online sources)
+
+def cross_entropy_w_softmax(y,z):
+    """
+    Loss function that combines softmax and cross entropy. Use for more complex
+    NN where need to use tricks to prevent computational errors when computing
+    softmax and cross entropy of large output values. Difference between this
+    and other cross entropy is this takes in the output vector z BEFORE softmax
+    is applied, and calculates same output value but without running into 
+    computational errors.
+    
+    Parameters
+    ----------
+    y : 1-hot vector encoding of training sample's true category 
+    z: output of NN feedforward pass
+    
+    """
+    
+    z_max = np.max(z)
+    
+    #trick used to calculate log of softmax without errors
+    log_softmax = z-z_max - np.log(np.sum(np.exp(z-z_max)))
+    
+    return -np.dot(np.transpose(y),log_softmax)
