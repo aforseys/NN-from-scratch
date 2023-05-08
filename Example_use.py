@@ -13,17 +13,16 @@ Created on Mon May  1 11:34:36 2023
 
 @author: aforsey
 """
-import os
 import activation_functions
 import loss_functions
 import process_MNIST
 from init_NN import NeuralNetwork
 
 #local path to files 
-training_images_path = os.getcwd() + '/training_data/train-images.idx3-ubyte'
-training_labels_path = os.getcwd() + '/training_data/train-labels.idx1-ubyte'
-test_images_path = os.getcwd() + '/test_data/t10k-images.idx3-ubyte'
-test_labels_path = os.getcwd()+ '/test_data/t10k-labels.idx1-ubyte'
+training_images_path =  'training_data/train-images.idx3-ubyte'
+training_labels_path =  'training_data/train-labels.idx1-ubyte'
+test_images_path = 'test_data/t10k-images.idx3-ubyte'
+test_labels_path =  'test_data/t10k-labels.idx1-ubyte'
 
 
 #Loads MNIST data files. Assumes unzipped idx files avilable at: http://yann.lecun.com/exdb/mnist/
