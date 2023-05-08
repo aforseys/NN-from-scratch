@@ -19,9 +19,10 @@ def load_data(images_path, labels_path):
     Returns flattened, normalized image vectors (length 728)  and one-hot 
     vector encodings of corresponding image labels.                                  
     """
+    cwd = os.getcwd()
 
-    image_file_loc = os.join(os.getcwd(),images_path)
-    label_file_loc = os.join(os.getcwd(),labels_path)
+    image_file_loc = os.path.join(cwd,images_path)
+    label_file_loc = os.path.join(cwd,labels_path)
 
     #import data 
     images = idx2numpy.convert_from_file(image_file_loc)
@@ -32,7 +33,7 @@ def load_data(images_path, labels_path):
 
     #make labels one-hot vectors 
     one_hot_labels = np.zeros((labels.size,labels.max()+1)) #have to add one because includes 0 as possible number 
-    labels[np.arange(labels.size),labels] = 1
+    one_hot_labels[np.arange(labels.size),labels] = 1
     
     #normalize images by dividing by 255
     return images/255, one_hot_labels
