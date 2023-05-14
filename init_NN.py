@@ -6,10 +6,11 @@ Created on Sun Apr 16 18:38:03 2023
 @author: aforsey
 """
 import numpy as np
+from tqdm import tqdm
 from activation_functions import softmax
 
 class NeuralNetwork:
-    def __init__(self,lsize,activation,dactivation,loss, dloss):
+    def __init__(self,lsize,activation,dactivation,loss, dloss, lr=0.001):
         """
         Initializes neural net. Assumed neural net architecture has a linear 
         function and an activation function applied at each layer, EXCEPT no 
@@ -34,6 +35,7 @@ class NeuralNetwork:
         self.dact = dactivation
         self.loss = loss
         self.dloss = dloss
+        self.lr = lr
         self.init_params()
 
     def init_params(self):
@@ -106,7 +108,7 @@ class NeuralNetwork:
         
         return vecs, error
             
-    def backprop(self,X,Y, alpha=0.001):
+    def backprop(self,X,Y):
         """
         Parameters
         ----------
@@ -116,7 +118,8 @@ class NeuralNetwork:
         Y : Corresponding matrix of one-hot encodings of image labels (each
         corresponds to one image). 
         
-        alpha : Learning rate. Used to change step
+        ***** now just using lr from init*************
+        deprecated - alpha : Learning rate. Used to change step
            size of gradient updates. The default is 0.001.
 
         Returns
@@ -173,7 +176,7 @@ class NeuralNetwork:
              A,b = self.params[l] 
              
              #take step in the direction of the average gradient over all samples in batch
-             self.params[l] = (A-alpha*grad_A[l]/batch_size, b - alpha*grad_b[l]/batch_size) 
+             self.params[l] = (A-self.lr*grad_A[l]/batch_size, b - self.lr*grad_b[l]/batch_size) 
   
           
     def train(self, X,Y, epochs,batch_size):
@@ -195,7 +198,7 @@ class NeuralNetwork:
         (plus one accounts for # training samples not exactly divisible by batch size)
         """
         
-        for i in range(epochs):
+        for i in tqdm(range(epochs)):
             print('epoch number',i)
             
             #shuffle data at start of each epoch
@@ -208,7 +211,7 @@ class NeuralNetwork:
             Y_batched = [Y_shuffled[i:i + batch_size,:] for i in range(0, len(Y_shuffled), batch_size)]
             
             #Perform parameter update with batch 
-            for i in range(len(X_batched)):
+            for i in tqdm(range(len(X_batched))):
                 self.backprop(X_batched[i],Y_batched[i])
             
         
@@ -238,8 +241,8 @@ class NeuralNetwork:
             vecs, error = self.feedforward(np.transpose(X[i].reshape(1,np.size(X[i]))), np.transpose(Y[i].reshape(1,np.size(Y[i]))))
             cross_ent_errors.append(error[0][0])
             classification = np.argmax(softmax(vecs[-1])) 
-            print(classification)
-            print(Y[i][classification])
+            # print(classification)
+            # print(Y[i][classification])
             classification_matches.append((Y[i][classification] == 1))
             
         print('Average cross entropy loss:', np.mean(cross_ent_errors))
