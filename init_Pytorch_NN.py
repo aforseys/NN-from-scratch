@@ -29,7 +29,7 @@ class FeedForwardNN(nn.Module):
         return x 
     
     # def train(self, num_epochs, batch_size, learning_rate, training_data):
-    def train(self, num_epochs, batch_size, learning_rate, train_dataloader, debug=False, info_skip=100):
+    def train(self, num_epochs, input_size, learning_rate, train_dataloader, debug=False, info_skip=100):
         epoch_losses = []
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.SGD(self.parameters(), lr=learning_rate)
@@ -41,7 +41,7 @@ class FeedForwardNN(nn.Module):
             for i, (images, labels) in tqdm(enumerate(train_dataloader)):
             # for i, (images, labels) in tqdm(enumerate(training_data)):
                 # Flatten the images and convert to PyTorch tensors
-                images = images.view(-1, batch_size)
+                images = images.view(-1, input_size)
                 
                 # Forward pass
                 outputs = self.forward(images)
