@@ -177,10 +177,10 @@ class NeuralNetwork:
              #take step in the direction of the average gradient over all samples in batch
              self.params[l] = (A-self.learning_rate*grad_A[l]/batch_size, b - self.learning_rate*grad_b[l]/batch_size) 
         
-        return losses
+        return np.mean(losses)
   
           
-    def train(self, X,Y, epochs,batch_size):
+    def train(self, X,Y, epochs,batch_size, debug = False):
         """
         Parameters
         ----------
@@ -198,9 +198,10 @@ class NeuralNetwork:
         # updates =  # epochs * (#training samples/batch_size  +1) 
         (plus one accounts for # training samples not exactly divisible by batch size)
         """
+        epoch_losses = []
         
         for i in tqdm(range(epochs)):
-            print('epoch number',i)
+            batch_losses = []
             
             #shuffle data at start of each epoch
             p = np.random.permutation(len(X))
@@ -210,14 +211,18 @@ class NeuralNetwork:
             #break data up into batches 
             X_batched = [X_shuffled[i:i + batch_size,:] for i in range(0, len(X_shuffled), batch_size)]
             Y_batched = [Y_shuffled[i:i + batch_size,:] for i in range(0, len(Y_shuffled), batch_size)]
-            print('number of batches',len(X_batched))
             
             #Perform parameter update with batch 
             for j in tqdm(range(len(X_batched))):
-                losses = self.backprop(X_batched[j],Y_batched[j])
-                if (j+1) % 100 == 0:
-                    print(f'Epoch [{i+1}/{epochs}], Step [{j+1}/{len(X_batched)}], Loss: {losses[-1]}')
+                loss = self.backprop(X_batched[j],Y_batched[j])
+                batch_losses.append(loss)
+                # print(f'Epoch [{i+1}/{epochs}], Step [{j+1}/{len(X_batched)}], Loss: {loss}')
+                if debug and ((j+1) % 100 == 0):
+                    print(f'Epoch [{i+1}/{epochs}], Step [{j+1}/{len(X_batched)}], Loss: {np.mean(batch_losses)}')
             
+            epoch_losses.append(np.mean(batch_losses))
+            
+        return epoch_losses
         
     def test(self,X,Y):
         
@@ -245,8 +250,8 @@ class NeuralNetwork:
             vecs, error = self.feedforward(np.transpose(X[i].reshape(1,np.size(X[i]))), np.transpose(Y[i].reshape(1,np.size(Y[i]))))
             cross_ent_errors.append(error[0][0])
             classification = np.argmax(softmax(vecs[-1])) 
-            print(classification)
-            print(Y[i][classification])
+            # print(classification)
+            # print(Y[i][classification])
             classification_matches.append((Y[i][classification] == 1))
             
         print('Average cross entropy loss:', np.mean(cross_ent_errors))
