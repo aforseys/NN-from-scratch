@@ -34,12 +34,12 @@ test_images, test_labels = process_MNIST.load_data(test_images_path, test_labels
 #Will have linear activation functions between each layer, and ReLU activation functions after 
 #each linear activation function except between last hidden layer and output layer. 
 lsize = [784, 128, 64, 10] #e.g. this structure will have 3 linear activation functions and 2 ReLU fcns
-
+lr = 0.001
 ##initialize NN 
 nn = NeuralNetwork(lsize, activation_functions.ReLU, activation_functions.dReLU, loss_functions.cross_entropy_w_softmax, loss_functions.dcross_entropy)
 
 ##train NN (example uses mini-batch)
-nn.train(training_images, training_labels, epochs = 10, batch_size=1)
+nn.train(training_images, training_labels, epochs = 10, batch_size=64)
 #gradient descent means batch size = # training samples (# steps you take = # epochs)
 #stochastic gradient descent means batch size = 1
 

@@ -108,7 +108,7 @@ class NeuralNetwork:
         
         return vecs, error
             
-    def backprop(self,X,Y):
+    def backprop(self,X,Y, alpha=0.001):
         """
         Parameters
         ----------
@@ -176,7 +176,7 @@ class NeuralNetwork:
              A,b = self.params[l] 
              
              #take step in the direction of the average gradient over all samples in batch
-             self.params[l] = (A-self.lr*grad_A[l]/batch_size, b - self.lr*grad_b[l]/batch_size) 
+             self.params[l] = (A-alpha*grad_A[l]/batch_size, b - alpha*grad_b[l]/batch_size) 
   
           
     def train(self, X,Y, epochs,batch_size):

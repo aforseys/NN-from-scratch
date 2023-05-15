@@ -40,8 +40,10 @@ test_data = datasets.MNIST(
     transform=ToTensor()
 )
 
-train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
+batch_size = 64
+
+train_dataloader = DataLoader(training_data, batch_size=batch_size, shuffle=True)
+test_dataloader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 
 
 #Define NN architecture. Input size (first layer) and output size (last layer) can't change.
@@ -67,8 +69,8 @@ model.train(num_epochs, batch_size=input_size, learning_rate=learning_rate,  tra
 
 ##test NN
 # cross_ent_error, classification_error = nn.test(test_images, test_labels)
-test_loss, correct = model.test(test_dataloader, input_size=input_size)
+cross_ent_error, classification_error = model.test(test_dataloader, input_size=input_size)
 
-print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-            test_loss, correct, len(test_dataloader.dataset),
-            100. * correct / len(test_dataloader.dataset)))
+# print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+#             test_loss, correct, len(test_dataloader.dataset),
+#             100. * correct / len(test_dataloader.dataset)))

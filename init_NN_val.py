@@ -105,6 +105,7 @@ class NeuralNetwork:
             vecs.append(v)
         
         error = self.loss(y, v)
+        # print('error:', error)
         
         return vecs, error
             
@@ -180,7 +181,7 @@ class NeuralNetwork:
         return np.mean(losses)
   
           
-    def train(self, X,Y, epochs,batch_size, debug = False):
+    def train(self, X,Y, epochs,batch_size, debug = False, info_skip=100):
         """
         Parameters
         ----------
@@ -199,10 +200,11 @@ class NeuralNetwork:
         (plus one accounts for # training samples not exactly divisible by batch size)
         """
         epoch_losses = []
+        # batch_losses = []
         
         for i in tqdm(range(epochs)):
             batch_losses = []
-            
+            # batch_losses.append([])            
             #shuffle data at start of each epoch
             p = np.random.permutation(len(X))
             X_shuffled = X[p]
@@ -216,11 +218,13 @@ class NeuralNetwork:
             for j in tqdm(range(len(X_batched))):
                 loss = self.backprop(X_batched[j],Y_batched[j])
                 batch_losses.append(loss)
+                # print("batch loss: ", loss)
                 # print(f'Epoch [{i+1}/{epochs}], Step [{j+1}/{len(X_batched)}], Loss: {loss}')
-                if debug and ((j+1) % 100 == 0):
+                if debug and ((j+1) % info_skip == 0):
                     print(f'Epoch [{i+1}/{epochs}], Step [{j+1}/{len(X_batched)}], Loss: {np.mean(batch_losses)}')
             
             epoch_losses.append(np.mean(batch_losses))
+            print("epoch loss: ", epoch_losses[-1])
             
         return epoch_losses
         
